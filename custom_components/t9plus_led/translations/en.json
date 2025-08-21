@@ -1,0 +1,19 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Already configured"
+        },
+        "error": {
+            "cannot_connect": "Cannot connect",
+            "device_required": "Device required",
+            "unknown": "unknown"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "device": "Device"
+                }
+            }
+        }
+   }
+}

@@ -1,0 +1,10 @@
+{
+  "domain": "t9plus_led",
+  "name": "T9Plus LED",
+  "version": "0.1.0",
+  "integration_type": "device",
+  "iot_class": "assumed_state",
+  "requirements": [ "pyserial" ],
+  "single_config_entry": true,
+  "config_flow": true
+}
