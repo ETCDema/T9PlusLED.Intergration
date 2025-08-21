@@ -48,7 +48,7 @@ class ModeSelectEntity(SelectEntity, RestoreEntity):
         
         self._attr_current_option = option
         self._attr_icon = "mdi:led-strip-variant-off" if option=="Off" else "mdi:led-strip-variant"
-        self._adapter.update_device()
+        await self._adapter.update_device()
         self.async_write_ha_state()  # Сохраняем состояние
 
     async def async_added_to_hass(self):

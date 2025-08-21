@@ -7,7 +7,7 @@ from .const import *
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up the integration."""
-    # Create device adapter
+    # Создаем объект управления
     adapter = DeviceAdapter(hass, entry.data["device"])
     hass.data[DOMAIN] = { entry.entry_id: adapter }
 	
@@ -18,17 +18,18 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         identifiers={(DOMAIN, DEVICE_ID)},
         name=DEVICE_NAME,
     )
-
+    # Данные устройства для элементов управления
     adapter.device_id = device.id
     adapter.device_info = dr.DeviceInfo(
         identifiers={(DOMAIN, DEVICE_ID)},
         name=DEVICE_NAME,
 	)
     
-    # Create entities
+    # Создаем элементы управления
     await hass.config_entries.async_forward_entry_setups(entry, ['select', 'number'])
 
-    adapter.update_device()
+    # Инициализируем устройство по значениям созданных элементов
+    await adapter.update_device()
 
     return True
 

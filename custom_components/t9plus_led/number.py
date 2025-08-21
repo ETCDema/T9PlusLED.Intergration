@@ -70,7 +70,7 @@ class DeviceNumberEntity(RestoreNumber):
         self._attr_native_value = value
         
         # Send update to physical device
-        self._adapter.update_device()
+        await self._adapter.update_device()
         self.async_write_ha_state()  # Сохраняем состояние
 
     async def async_added_to_hass(self):

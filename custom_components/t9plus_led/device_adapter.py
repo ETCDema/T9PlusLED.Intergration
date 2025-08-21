@@ -6,7 +6,7 @@ to set the LED mode, brightness, and animation speed.
 """
 
 import logging
-import time
+import asyncio
 from typing import List
 
 from homeassistant.helpers import device_registry as dr
@@ -21,7 +21,6 @@ try:
 except ImportError:
   _LOGGER.error("Error: The 'pyserial' library is required. Please install it using 'pip install pyserial'")
 
-# --- Protocol Constants ---
 class DeviceAdapter:
   def __init__(self, hass, device: str):
     self.hass = hass
@@ -32,16 +31,11 @@ class DeviceAdapter:
     self.device_id: str
     self.device_info: dr.DeviceInfo
 	
-  def update_device(self):
+  async def update_device(self):
     """Send parameters to physical device"""
-    # Implement your device communication here
-    # Example: serial.write(f"{self.brightness},{self.speed},{self.mode}")
-    self.set_state()
-
-  def set_state(self):
     try:
-      command_packet        = self.build_command_packet(self.mode.current_option or 'Auto', int(self.brightness.native_value or 3), int(self.speed.native_value or 3))
-      self.send_command(self._device, command_packet, False)
+      command_packet = self.build_command_packet(self.mode.current_option or 'Auto', int(self.brightness.native_value or 3), int(self.speed.native_value or 3))
+      await self.send_command(self._device, command_packet, False)
       _LOGGER.info(
     	"New LED state: %s 🔅 %s ⏩ %s",
         self.mode.state,
@@ -82,7 +76,7 @@ class DeviceAdapter:
       checksum_byte,
     ]
 
-  def send_command(self, serial_port: str, packet: List[bytes], verbose: bool):
+  async def send_command(self, serial_port: str, packet: List[bytes], verbose: bool):
     """
     Opens the serial port and sends the command packet byte by byte.
 
@@ -105,6 +99,6 @@ class DeviceAdapter:
         if verbose:
           _LOGGER.debug(f" -> Sent {byte_to_send.hex()}")
         # A small delay seems to be required between sending each byte.
-        time.sleep(0.005)
+        await asyncio.sleep(0.005)
         
     if verbose: _LOGGER.debug("Command sent successfully.")
